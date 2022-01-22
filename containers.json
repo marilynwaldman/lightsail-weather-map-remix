@@ -1,0 +1,26 @@
+{
+    "proxy": {
+        "image": ":weather-service.nginx-container.39",
+        "ports": {
+            "80": "HTTP"
+        },
+        "environment": {
+            "NGINX_ENVSUBST_OUTPUT_DIR": "/etc/nginx",
+            "FLASK_HOST": "flask",
+            "FLASK_PORT": "8000"
+        }
+    },
+    "flask": {
+        "image": ":weather-service.flask-container.52",
+        "command": ["gunicorn", "--workers", "1", "--bind", "0.0.0.0:8000", "wsgi:server"],
+        "ports": {
+            "8000": "HTTP"
+        },
+        "environment": {
+            "FLASK_APP": "wsgi.py"
+        }
+
+
+    }
+}
+

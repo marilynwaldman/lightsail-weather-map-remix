@@ -1,0 +1,9 @@
+flask/static/*.html
+./flask/static/*html
+/flask/static/*.html
+/flask/static/*.html
+/flask/download/*.*
+**/*.ipynb_checkpoints/
+/data
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
