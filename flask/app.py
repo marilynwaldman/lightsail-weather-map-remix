@@ -149,7 +149,7 @@ def apierror():
   return render_template('error.html', culprit='API', details=details)
 
 @server.route('/maperror.html')
-def geoerror():
+def maperror():
   details = "Map not found."
   return render_template('error.html', culprit='the Map', details=details)
 
