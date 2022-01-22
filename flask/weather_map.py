@@ -16,15 +16,16 @@ import datetime as dt
 
 def crunch_data(weather_df):
     wxwarnings = {}
-    k = 5
+    k = 0
     for w in weather_df['PROD_TYPE'].unique():
         wxwarnings[w]=k
+    #    print(w,k)
         k += 10
 
     
     all_values = wxwarnings.values()
-    max_wxwarnings = max(all_values)+5
-    min_wxwarnings = min(all_values)-5
+    max_wxwarnings = max(all_values)
+    min_wxwarnings = min(all_values)
 
 
     # Now create an column PROD_ID which duplicates PROD_TYPE
@@ -46,13 +47,16 @@ def crunch_data(weather_df):
 
 
 def make_weather_map(weather_df, map_path, map_dir):
-    
+    print("in make weather map")
+    print(weather_df.head(2))
+    print(map_path)
+    print(map_dir)
     # weather_df - shape files with weather warnings
     # map_path - path to file with generated weather map, ie .html file
 
     # get the current time in UTC (constant reference timezone)
     timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
-    
+    print(timestamp)
     # Use branca.colormap instead of choropleth
     # augment df with color features
     weather_df, max_wxwarnings, min_wxwarnings = crunch_data(weather_df)
@@ -60,17 +64,7 @@ def make_weather_map(weather_df, map_path, map_dir):
     mbr = fl.Map(location=[40.0,-95.0],zoom_start=4,tiles="Stamen Toner")
 
     colormap = cm.linear.Set1_09.scale(min_wxwarnings,max_wxwarnings).to_step(len(set(weather_df['PROD_ID'])))
-    
-
-##### Merge (dissolve) weather data by warning type, onset, expiration
-
-    weather_dfmerge = weather_df.dissolve(by=['PROD_TYPE','ONSET','ENDS'],aggfunc='first',as_index=False,dropna=False)
-    weather_df = weather_dfmerge
-
-    #Simplify geometry to reduce size of plot
-    weather_df['geometry']=weather_df['geometry'].simplify(tolerance=0.01)
-
-######
+    print("after colormap")
 
     #Add weather data to map with mouseover (this will take a few minutes), include tooltip
 
@@ -88,7 +82,7 @@ def make_weather_map(weather_df, map_path, map_dir):
                },
                
                tooltip=fl.GeoJsonTooltip(
-                   fields=['PROD_TYPE','ONSET','ENDS'], 
+                   fields=['PROD_TYPE','ISSUANCE','EXPIRATION'], 
                    aliases=['Hazard', 'Starts','Expires'],
                    labels=True,
                    localize=True
@@ -97,18 +91,22 @@ def make_weather_map(weather_df, map_path, map_dir):
 
     # Add minimap
     MiniMap(tile_layer='stamenterrain',zoom_level_offset=-5).add_to(mbr)
-    
-    if os.path.isdir(map_dir):
-        
+    print("after map title")
+    if os.path.exists(map_dir) and os.path.isdir(map_dir):
+        print("weathermaps directory exits")
         if os.path.exists(map_path):
+            print("if map_path exits")
             os.remove(map_path)
-            mbr.save(map_path) 
-            return timestamp
-        else:
+        mbr.save(map_path) 
+        if not os.path.exists(map_path):
+            print("map not saved") 
             return None
-    else:
-        return None
+        print("map saved in if")  
     
+    
+    print("saved map")
+    
+    return  timestamp
 
 
 
