@@ -93,8 +93,11 @@ def index():
       print("map not saved")
       return redirect('/maperror.html')
     server.vars['map_html'] = map_html  
-  
+    # get the current time in UTC (constant reference timezone)
+    
     server.vars['Title_line1'] = 'Current U.S. Weather Statements'
+    timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
+    print(timestamp)
     server.vars['Title_line2'] = timestamp[0:10]+' '+timestamp[11:16]+' UTC'
     render_template('display.html', vars=server.vars)
     '''

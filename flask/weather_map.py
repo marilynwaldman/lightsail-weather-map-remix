@@ -55,8 +55,7 @@ def make_weather_map(weather_df, map_path, map_dir, vars):
     # map_path - path to file with generated weather map, ie .html file
 
     # get the current time in UTC (constant reference timezone)
-    timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
-    print(timestamp)
+    
     # Use branca.colormap instead of choropleth
     # augment df with color features
     weather_df, max_wxwarnings, min_wxwarnings = crunch_data(weather_df)
