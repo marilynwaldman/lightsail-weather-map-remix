@@ -99,7 +99,7 @@ def index():
     timestamp = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
     print(timestamp)
     server.vars['Title_line2'] = timestamp[0:10]+' '+timestamp[11:16]+' UTC'
-    render_template('display.html', vars=server.vars)
+    return render_template('display.html', vars=server.vars)
     '''
     # Display the weather map
     if os.path.exists(map_path):
