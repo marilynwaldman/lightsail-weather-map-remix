@@ -49,7 +49,7 @@ os.mkdir(map_dir)
 map_path =  str(map_dir)+'/wxwarning.html'
 server.vars['map_path'] = map_path
 server.vars['map_dir'] = map_dir
-server.vars['map_html'] = None
+#server.vars['map_html'] = None
 
 # Set up cache headers and directives
 def nocache(view):
