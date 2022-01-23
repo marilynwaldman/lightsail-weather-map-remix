@@ -41,14 +41,7 @@ cwd = Path.cwd()
 
 logo_path = os.path.join(cwd, 'static/img/logo.png' )
 server.vars['logo_path'] = logo_path
-map_dir = os.path.join(cwd, 'weathermaps')
-if os.path.exists(map_dir) and os.path.isdir(map_dir):
-      shutil.rmtree(map_dir)
 
-os.mkdir(map_dir) 
-map_path =  str(map_dir)+'/wxwarning.html'
-server.vars['map_path'] = map_path
-server.vars['map_dir'] = map_dir
 #server.vars['map_html'] = None
 
 # Set up cache headers and directives
@@ -76,9 +69,8 @@ def main():
 def index():
   if request.method == 'GET':
     
-    map_path = server.vars.get("map_path")
-    map_dir = server.vars.get("map_dir")
-    map_html =  server.vars.get("map_html")
+  
+    #map_html =  server.vars.get("map_html")
 
     # Get weather data (geopandas dataframe)
     weather_df =  get_weather_data(server)
@@ -88,9 +80,9 @@ def index():
 
     # Create the map
 
-    map_html = make_weather_map(weather_df, map_path, map_dir, server.vars)
+    map_html = make_weather_map(weather_df)
     if map_html is None:
-      print("map not saved")
+      #print("map not saved")
       return redirect('/maperror.html')
     server.vars['map_html'] = map_html  
     # get the current time in UTC (constant reference timezone)
@@ -100,15 +92,6 @@ def index():
     print(timestamp)
     server.vars['Title_line2'] = timestamp[0:10]+' '+timestamp[11:16]+' UTC'
     return render_template('display.html', vars=server.vars)
-    '''
-    # Display the weather map
-    if os.path.exists(map_path):
-        print("about to display map")
-        return render_template('display.html', vars=server.vars)
-    else:     
-        return redirect('/maperror.html')
-   '''
-    pass
 
 
 
@@ -117,28 +100,18 @@ def index():
 def show_map():
   print("show map")
   return render_template_string(server.vars['map_html'])
-  map_path = server.vars.get("map_path")
-  print("show map")
-  print(map_path)
-  #map_file = Path(map_path)
-  if os.path.exists(map_path):
-    print("found map")
-    return send_file(map_path)
-  else:
-    return render_template('error.html', culprit='map file', details="the map file couldn't be loaded")
-
-  pass
+  
 
 
 @server.route('/get_logo')
 def get_logo():
-  print("in get logo")
+  #print("in get logo")
   #logo_path = os.path.join(server.root_path, 'static/img/logo.png' )
   logo_path = server.vars.get("logo_path")
   #logo_file = Path(logo_path)
-  print(logo_path)
+  #print(logo_path)
   if os.path.exists(logo_path):
-    print("logo found")
+    #print("logo found")
     return send_file(logo_path)
   else:
     return render_template('error.html', culprit='logo file', details="the logo file couldn't be loaded")
