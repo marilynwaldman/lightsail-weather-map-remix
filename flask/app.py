@@ -22,7 +22,7 @@ import datetime as dt
 
 
 #from ediblepickle import checkpoint
-from flask import Flask, render_template, request, redirect, url_for, send_file, make_response
+from flask import Flask, render_template, render_template_string, request, redirect, url_for, send_file, make_response
 
 # Define global environoment:
 #  1.  Paths to maps and images such as the logo
@@ -49,6 +49,7 @@ os.mkdir(map_dir)
 map_path =  str(map_dir)+'/wxwarning.html'
 server.vars['map_path'] = map_path
 server.vars['map_dir'] = map_dir
+server.vars['map_html'] = None
 
 # Set up cache headers and directives
 def nocache(view):
@@ -77,6 +78,7 @@ def index():
     
     map_path = server.vars.get("map_path")
     map_dir = server.vars.get("map_dir")
+    map_html =  server.vars.get("map_html")
 
     # Get weather data (geopandas dataframe)
     weather_df =  get_weather_data(server)
@@ -86,7 +88,7 @@ def index():
 
     # Create the map
 
-    timestamp = make_weather_map(weather_df, map_path, map_dir)
+    timestamp = make_weather_map(weather_df, map_path, map_dir, server.vars)
     if timestamp is None:
       print("map not saved")
       return redirect('/maperror.html')
@@ -108,7 +110,8 @@ def index():
 @server.route('/maps/map.html')
 @nocache
 def show_map():
-  
+  print("show map")
+  return render_template_string(server.vars['map_html'])
   map_path = server.vars.get("map_path")
   print("show map")
   print(map_path)
