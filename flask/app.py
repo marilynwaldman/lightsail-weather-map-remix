@@ -88,10 +88,11 @@ def index():
 
     # Create the map
 
-    timestamp = make_weather_map(weather_df, map_path, map_dir, server.vars)
-    if timestamp is None:
+    map_html = make_weather_map(weather_df, map_path, map_dir, server.vars)
+    if map_html is None:
       print("map not saved")
       return redirect('/maperror.html')
+    server.vars['map_html'] = map_html  
   
     server.vars['Title_line1'] = 'Current U.S. Weather Statements'
     server.vars['Title_line2'] = timestamp[0:10]+' '+timestamp[11:16]+' UTC'

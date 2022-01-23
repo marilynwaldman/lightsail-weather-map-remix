@@ -93,8 +93,8 @@ def make_weather_map(weather_df, map_path, map_dir, vars):
     MiniMap(tile_layer='stamenterrain',zoom_level_offset=-5).add_to(mbr)
     print("after map title")
     html_string = mbr.get_root().render()
-    vars['map_html'] = html_string
-    return timestamp
+    #vars['map_html'] = html_string
+    return html_string
 
     if os.path.exists(map_dir) and os.path.isdir(map_dir):
         print("weathermaps directory exits")
