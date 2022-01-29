@@ -60,12 +60,14 @@ def nocache(view):
 # Define the "root" route.   Redirect to index
 
 @server.route('/')
+@nocache
 def main():
   return redirect('/index.html')
 
 #  Define the index route: GET 
 
 @server.route('/index.html', methods=['GET'])
+@nocache
 def index():
   if request.method == 'GET':
     
@@ -96,7 +98,7 @@ def index():
 
 
 @server.route('/maps/map.html')
-#   @nocache
+@nocache
 def show_map():
   print("show map")
   return render_template_string(server.vars['map_html'])
