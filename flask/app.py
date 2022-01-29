@@ -82,7 +82,7 @@ def index():
 
     map_html = make_weather_map(weather_df)
     if map_html is None:
-      #print("map not saved")
+      print("map not saved")
       return redirect('/maperror.html')
     server.vars['map_html'] = map_html  
     # get the current time in UTC (constant reference timezone)
