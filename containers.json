@@ -1,6 +1,6 @@
 {
     "proxy": {
-        "image": ":weather-service.nginx-container.64",
+        "image": ":weather-service.nginx-container.78",
         "ports": {
             "80": "HTTP"
         },
