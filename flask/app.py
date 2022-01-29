@@ -96,7 +96,7 @@ def index():
 
 
 @server.route('/maps/map.html')
-@nocache
+#   @nocache
 def show_map():
   print("show map")
   return render_template_string(server.vars['map_html'])
