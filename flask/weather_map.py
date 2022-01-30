@@ -89,7 +89,7 @@ def make_weather_map(weather_df):
     # Add minimap
     MiniMap(tile_layer='stamenterrain',zoom_level_offset=-5).add_to(mbr)
     print("after map title")
-    #mbr.save('mymap.html')
+    mbr.save('mymap.html')
     html_string = mbr.get_root().render()
     print("after html_string")
     #vars['map_html'] = html_string
